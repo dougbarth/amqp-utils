@@ -1,0 +1,43 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+
+gem 'trollop'
+require 'trollop'
+
+gem 'amqp'
+require 'mq'
+
+opts = Trollop::options do
+  banner <<-END
+Pops a single message from the queue.
+  pop <queue>
+  
+  END
+  opt :verbose, 'Print all AMQP commands sent and received.'
+end
+
+@queue = ARGV[0]
+
+EM.run do
+  AMQP.logging = opts.verbose
+
+  trap("INT") { AMQP.stop { EM.stop } }
+
+  mq = MQ.new
+
+  mq.queue(@queue).pop do |header, message|
+    if message
+      puts "(#{@queue})"
+      puts "  Header: "
+      header.properties.each do |key, value|
+        puts "    #{key.inspect} => #{value.inspect}"
+      end
+      puts "  Message: #{message.inspect}"
+    else
+      puts "(#{@queue}) empty"
+    end
+
+    AMQP.stop { EM.stop }
+  end
+end

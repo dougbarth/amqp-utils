@@ -1,0 +1,21 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+gem 'amqp'
+require 'mq'
+
+@queues = ARGV
+def @queues.delete_or_stop
+  queue = pop
+  if queue
+    puts "Deleteing #{queue}..."
+    MQ.new.queue(queue).delete
+    EM.next_tick { delete_or_stop }
+  else
+    AMQP.stop { EM.stop }
+  end
+end
+
+EM.run do
+  EM.next_tick { !@queues.delete_or_stop }
+end

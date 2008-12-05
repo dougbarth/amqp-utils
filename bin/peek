@@ -1,0 +1,49 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+
+gem 'trollop'
+require 'trollop'
+
+gem 'amqp'
+require 'mq'
+
+opts = Trollop::options do
+  banner <<-END
+Displays the head of the queue without removing the message from the queue.
+
+  peek <queue>
+
+  NOTE: This operation does have side effects on the server. The message is
+        placed at the end of the queue after returning from this method. The
+        message is also marked as being redelivered.
+
+Options:
+  END
+  opt :verbose, 'Print all AMQP commands sent and received.'
+end
+
+@queue = ARGV[0]
+
+EM.run do
+  AMQP.logging = opts.verbose
+
+  trap("INT") { AMQP.stop { EM.stop } }
+
+  mq = MQ.new
+
+  mq.queue(@queue).pop(:ack => true) do |header, message|
+    if message
+      puts "(#{@queue})"
+      puts "  Header: "
+      header.properties.each do |key, value|
+        puts "    #{key.inspect} => #{value.inspect}"
+      end
+      puts "  Message: #{message.inspect}"
+    else
+      puts "(#{@queue}) empty"
+    end
+
+    AMQP.stop { EM.stop }
+  end
+end

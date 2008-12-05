@@ -1,0 +1,23 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+gem 'amqp'
+require 'mq'
+
+@queues = ARGV
+
+EM.run do
+  trap("INT") { AMQP.stop { EM.stop } }
+
+  @queues.each do |queue|
+    puts "Dequeueing from #{queue}..."
+    mq = MQ.new
+
+    process_message = lambda do |header, message|
+      puts "(#{queue})"
+      puts "  Header: #{header.inspect}"
+      puts "  Message: #{message.inspect}"
+    end
+    mq.queue(queue).pop &process_message
+  end
+end

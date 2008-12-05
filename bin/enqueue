@@ -1,0 +1,48 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+
+gem 'trollop'
+require 'trollop'
+
+gem 'amqp'
+require 'mq'
+
+opts = Trollop::options do
+  banner <<-END
+Publishes a message to a particular queue.
+  enqueue <queue> <message>
+  
+  END
+  opt :verbose, 'Print all AMQP commands sent and received.'
+  opt :persistent, 'Mark messages as persistent.'
+  opt :count, 'Number of times the message should be published.', :type => :int, :default => 1
+end
+
+@queue = ARGV[0]
+@message = ARGV[1]
+
+EM.run do
+  #trap("INT") { AMQP.stop { EM.stop } }
+
+  AMQP.logging = opts.verbose
+  AMQP.start
+
+  process_stopper = EM.spawn do
+    @messages_sent ||= 0
+    @messages_sent += 1
+
+    if @messages_sent == opts.count
+      EM.next_tick { AMQP.stop { EM.stop } }
+    end
+  end
+
+  publisher = EM.spawn do |queue, message|
+    @mq ||= MQ.new
+    @mq.queue(queue).publish(message)
+    print '.'; STDOUT.flush
+    process_stopper.notify
+  end
+
+  opts.count.times { publisher.notify(@queue, @message) }
+end
