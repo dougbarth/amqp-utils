@@ -15,9 +15,9 @@ EM.run do
 
     process_message = lambda do |header, message|
       puts "(#{queue})"
-      puts "  Header: #{header.inspect}"
+      puts "  Header: #{header.properties.inspect}"
       puts "  Message: #{message.inspect}"
     end
-    mq.queue(queue).pop &process_message
+    mq.queue(queue).subscribe &process_message
   end
 end
