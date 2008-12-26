@@ -2,26 +2,27 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
-opts = Trollop::options do
-  banner <<-END
-Gets statistics on the queues specified.
-  queue_stat <queue> [<another_queue> ..]
-  
-  END
-  opt :verbose, 'Print all AMQP commands sent and received.'
-end
+class QueueStatCommand < Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Gets statistics on the queues specified.
+    |  queue_stat <queue> [<another_queue> ..]
+    |
+    }.margin
+  end
 
-@queues = ARGV
+  def execute
+    @queues = ARGV
 
-EM.run do
-  AMQP.logging = opts.verbose
+    @queues.each do |queue|
+      MQ.new.queue(queue).status do |size, consumers|
+        puts "Queue <#{queue}>: #{size} message(s), #{consumers} consumer(s)"
 
-  @queues.each do |queue|
-    MQ.new.queue(queue).status do |size, consumers|
-      puts "Queue <#{queue}>: #{size} message(s), #{consumers} consumer(s)"
-
-      @queues.delete(queue)
-      AMQP.stop { EM.stop } if @queues.empty?
+        @queues.delete(queue)
+        AMQP.stop { EM.stop } if @queues.empty?
+      end
     end
   end
 end
+
+QueueStatCommand.run
