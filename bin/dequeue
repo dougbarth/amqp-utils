@@ -3,6 +3,14 @@
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
 class DequeueCommand < Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Removes messages from the supplied queues and displays them on STDOUT.
+    |
+    |  dequeue <queue>[, <another queue>, ...]
+    }.margin
+  end
+
   def execute
     @queues = ARGV
     @queues.each do |queue|

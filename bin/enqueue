@@ -8,6 +8,8 @@ class EnqueueCommand < Command
     |Publishes a message to a particular queue.
     |
     |  enqueue <queue> <message>
+    |
+    |Enqueue options:
     }.margin
     options.opt :persistent, 'Mark messages as persistent.'
     options.opt :count, 'Number of times the message should be published.', :type => :int, :default => 1

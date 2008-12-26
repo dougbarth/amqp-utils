@@ -6,8 +6,8 @@ class QueueStatCommand < Command
   def prepare_options(options)
     options.banner %Q{
     |Gets statistics on the queues specified.
-    |  queue_stat <queue> [<another_queue> ..]
     |
+    |  queue_stat <queue> [<another_queue> ..]
     }.margin
   end
 

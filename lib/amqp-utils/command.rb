@@ -29,6 +29,10 @@ class Command
     @options = Trollop::options(@args) do
       command.prepare_options(self) if command.respond_to?(:prepare_options)
 
+      banner %Q{
+      |
+      |Standard options:
+      }.margin
       opt :verbose, 'Print all AMQP commands sent and received.'
     end
   end

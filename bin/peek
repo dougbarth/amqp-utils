@@ -12,8 +12,6 @@ class PeekCommand < Command
     |  NOTE: This operation does have side effects on the server. The message is
     |        placed at the end of the queue after returning from this method. The
     |        message is also marked as being redelivered.
-    |
-    |Options:
     }.margin
   end
 

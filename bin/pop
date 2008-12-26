@@ -6,8 +6,8 @@ class PopCommand < Command
   def prepare_options(options)
     options.banner %Q{
     |Pops a single message from the queue.
+    |
     |   pop <queue>
-    |  
     }.margin
   end
 

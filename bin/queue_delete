@@ -3,6 +3,14 @@
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
 class QueueDeleteCommand < Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Deletes the supplied queues.
+    |
+    |  queue_delete <queue>[, <another queue>, ...]
+    }.margin
+  end
+
   def execute
     @queues = ARGV
     def @queues.delete_or_stop
