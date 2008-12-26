@@ -2,36 +2,34 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
-opts = Trollop::options do
-  banner <<-END
-Pops a single message from the queue.
-  pop <queue>
-  
-  END
-  opt :verbose, 'Print all AMQP commands sent and received.'
-end
+class PopCommand < Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Pops a single message from the queue.
+    |   pop <queue>
+    |  
+    }.margin
+  end
 
-@queue = ARGV[0]
+  def execute
+    @queue = args[0]
 
-EM.run do
-  AMQP.logging = opts.verbose
-
-  trap("INT") { AMQP.stop { EM.stop } }
-
-  mq = MQ.new
-
-  mq.queue(@queue).pop do |header, message|
-    if message
-      puts "(#{@queue})"
-      puts "  Header: "
-      header.properties.each do |key, value|
-        puts "    #{key.inspect} => #{value.inspect}"
+    mq = MQ.new
+    mq.queue(@queue).pop do |header, message|
+      if message
+        puts "(#{@queue})"
+        puts "  Header: "
+        header.properties.each do |key, value|
+          puts "    #{key.inspect} => #{value.inspect}"
+        end
+        puts "  Message: #{message.inspect}"
+      else
+        puts "(#{@queue}) empty"
       end
-      puts "  Message: #{message.inspect}"
-    else
-      puts "(#{@queue}) empty"
-    end
 
-    AMQP.stop { EM.stop }
+      AMQP.stop { EM.stop }
+    end
   end
 end
+
+PopCommand.run
