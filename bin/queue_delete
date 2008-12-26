@@ -2,18 +2,22 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
-@queues = ARGV
-def @queues.delete_or_stop
-  queue = pop
-  if queue
-    puts "Deleteing #{queue}..."
-    MQ.new.queue(queue).delete
-    EM.next_tick { delete_or_stop }
-  else
-    AMQP.stop { EM.stop }
+class QueueDeleteCommand < Command
+  def execute
+    @queues = ARGV
+    def @queues.delete_or_stop
+      queue = pop
+      if queue
+        puts "Deleteing #{queue}..."
+        MQ.new.queue(queue).delete
+        EM.next_tick { delete_or_stop }
+      else
+        AMQP.stop { EM.stop }
+      end
+    end
+
+    EM.next_tick { @queues.delete_or_stop }
   end
 end
 
-EM.run do
-  EM.next_tick { !@queues.delete_or_stop }
-end
+QueueDeleteCommand.run
