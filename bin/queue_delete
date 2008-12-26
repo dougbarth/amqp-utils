@@ -1,8 +1,6 @@
 #!/usr/bin/ruby
 
-require 'rubygems'
-gem 'amqp'
-require 'mq'
+require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
 @queues = ARGV
 def @queues.delete_or_stop

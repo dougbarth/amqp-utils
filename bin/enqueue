@@ -1,12 +1,6 @@
 #!/usr/bin/ruby
 
-require 'rubygems'
-
-gem 'trollop'
-require 'trollop'
-
-gem 'amqp'
-require 'mq'
+require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
 opts = Trollop::options do
   banner <<-END
