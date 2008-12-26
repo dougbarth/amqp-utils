@@ -51,7 +51,14 @@ class Command
       AMQP.settings[:pass] = options.password
       AMQP.logging = options.verbose
 
-      trap("INT") { AMQP.stop { EM.stop } }
+      trap("INT") do
+        if @nice_tried
+          EM.stop
+        else
+          AMQP.stop { EM.stop }
+          @nice_tried = true
+        end
+      end
 
       execute
     end
