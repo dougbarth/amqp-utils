@@ -2,20 +2,21 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
 
-@queues = ARGV
+class DequeueCommand < Command
+  def execute
+    @queues = ARGV
+    @queues.each do |queue|
+      puts "Dequeueing from #{queue}..."
+      mq = MQ.new
 
-EM.run do
-  trap("INT") { AMQP.stop { EM.stop } }
-
-  @queues.each do |queue|
-    puts "Dequeueing from #{queue}..."
-    mq = MQ.new
-
-    process_message = lambda do |header, message|
-      puts "(#{queue})"
-      puts "  Header: #{header.properties.inspect}"
-      puts "  Message: #{message.inspect}"
+      process_message = lambda do |header, message|
+        puts "(#{queue})"
+        puts "  Header: #{header.properties.inspect}"
+        puts "  Message: #{message.inspect}"
+      end
+      mq.queue(queue).subscribe &process_message
     end
-    mq.queue(queue).subscribe &process_message
   end
 end
+
+DequeueCommand.run
