@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
-class EnqueueCommand < Command
+class EnqueueCommand < AmqpUtils::Command
   def prepare_options(options)
     options.banner %Q{
     |Publishes a message to a particular queue.

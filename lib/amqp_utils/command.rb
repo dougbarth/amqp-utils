@@ -1,15 +1,6 @@
-require 'rubygems'
+require 'amqp_utils'
 
-gem 'trollop'
-require 'trollop'
-
-gem 'amqp'
-require 'mq'
-
-gem 'facets'
-require 'facets/string/tab'
-
-class Command
+class AmqpUtils::Command
   class << self
     def run(args = ARGV)
       command = new(args)

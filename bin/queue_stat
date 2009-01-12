@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
-class QueueStatCommand < Command
+class QueueStatCommand < AmqpUtils::Command
   def prepare_options(options)
     options.banner %Q{
     |Gets statistics on the queues specified.

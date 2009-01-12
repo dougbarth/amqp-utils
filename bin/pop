@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
-class PopCommand < Command
+class PopCommand < AmqpUtils::Command
   def prepare_options(options)
     options.banner %Q{
     |Pops a single message from the queue.

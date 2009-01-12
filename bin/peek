@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-require File.dirname(__FILE__) + '/../lib/amqp-utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
-class PeekCommand < Command
+class PeekCommand < AmqpUtils::Command
   def prepare_options(options)
     options.banner %Q{
     |Displays the head of the queue without removing the message from the queue.
