@@ -7,7 +7,7 @@ class PeekCommand < AmqpUtils::Command
     options.banner %Q{
     |Displays the head of the queue without removing the message from the queue.
     |
-    |  peek <queue>
+    |  #{command_name} <queue>
     |
     |  NOTE: This operation does have side effects on the server. The message is
     |        placed at the end of the queue after returning from this method. The

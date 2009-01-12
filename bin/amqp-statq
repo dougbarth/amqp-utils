@@ -7,7 +7,7 @@ class QueueStatCommand < AmqpUtils::Command
     options.banner %Q{
     |Gets statistics on the queues specified.
     |
-    |  queue_stat <queue> [<another_queue> ..]
+    |  #{command_name} <queue> [<another_queue> ..]
     }.margin
   end
 

@@ -7,7 +7,7 @@ class PopCommand < AmqpUtils::Command
     options.banner %Q{
     |Pops a single message from the queue.
     |
-    |   pop <queue>
+    |   #{command_name} <queue>
     }.margin
   end
 

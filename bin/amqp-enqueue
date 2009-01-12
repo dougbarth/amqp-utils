@@ -7,7 +7,7 @@ class EnqueueCommand < AmqpUtils::Command
     options.banner %Q{
     |Publishes a message to a particular queue.
     |
-    |  enqueue <queue> <message>
+    |  #{command_name} <queue> <message>
     |
     |Enqueue options:
     }.margin

@@ -7,7 +7,7 @@ class QueueDeleteCommand < AmqpUtils::Command
     options.banner %Q{
     |Deletes the supplied queues.
     |
-    |  queue_delete <queue>[, <another queue>, ...]
+    |  #{command_name} <queue>[, <another queue>, ...]
     }.margin
   end
 

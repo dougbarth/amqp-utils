@@ -1,4 +1,4 @@
-require 'amqp_utils'
+require File.dirname(__FILE__) + '/../amqp_utils'
 
 class AmqpUtils::Command
   class << self
@@ -32,6 +32,10 @@ class AmqpUtils::Command
       opt :timeout, 'The connect timeout in seconds', :default => 5
       opt :verbose, 'Print all AMQP commands sent and received.'
     end
+  end
+
+  def command_name
+    File.basename($0)
   end
 
   def go
