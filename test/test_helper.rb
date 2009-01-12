@@ -1,2 +1,2 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/amqp-utils'
+require File.dirname(__FILE__) + '/../lib/amqp_utils'
