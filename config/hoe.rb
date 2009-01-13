@@ -8,7 +8,9 @@ RUBYFORGE_PROJECT = 'amqp_utils' # The unix name for your project
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
-  ['amqp', '>= 0.6.0']
+  ['amqp', '>= 0.6.0'],
+  ['trollop', '>= 1.10.2'],
+  ['facets', '>= 2.4.4']
 ]    # An array of rubygem dependencies [name, version]
 
 @config_file = "~/.rubyforge/user-config.yml"
@@ -61,7 +63,7 @@ $hoe = Hoe.new(GEM_NAME, VERS) do |p|
 
   # == Optional
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  #p.extra_deps = EXTRA_DEPENDENCIES
+  p.extra_deps = EXTRA_DEPENDENCIES
 
     #p.spec_extras = {}    # A hash of extra values to set in the gemspec.
   end
