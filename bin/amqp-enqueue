@@ -26,7 +26,7 @@ class EnqueueCommand < AmqpUtils::Command
           publish(message, :persistent => options.persistent)
 
         print '.'; STDOUT.flush
-        publisher.notify(queue, message, messages - 1)
+        publisher.notify(queue, message, messages - 1, options)
       else
         EM.next_tick { AMQP.stop { EM.stop } }
       end
