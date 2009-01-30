@@ -15,7 +15,7 @@ class QueueStatCommand < AmqpUtils::Command
     @queues = ARGV
 
     @queues.each do |queue|
-      MQ.new.queue(queue).status do |size, consumers|
+      MQ.new.queue(queue, :passive => true).status do |size, consumers|
         puts "Queue <#{queue}>: #{size} message(s), #{consumers} consumer(s)"
 
         @queues.delete(queue)
