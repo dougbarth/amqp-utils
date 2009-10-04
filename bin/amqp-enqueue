@@ -32,7 +32,7 @@ class EnqueueCommand < AmqpUtils::Command
       end
     end
 
-    publisher.notify(@queue, @message, options.count, options)
+    publisher.notify(@queue, @message, options[:count], options)
   end
 end
 
