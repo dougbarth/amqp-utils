@@ -1,0 +1,7 @@
+[x] fix amqp-enqueue message count
+[x] detect commandline ARGV when no queue is specified bring up help
+[x] amqp-stat hangs when no queue specified
+[o] amqp-enqueue inspect error when message not specified
+[o] amqp-dequeue hangs on exit
+[o] setup.rb seems to install command.rb in wrong location
+[o] gem create

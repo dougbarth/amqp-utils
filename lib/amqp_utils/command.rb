@@ -17,6 +17,7 @@ class AmqpUtils::Command
 
   def process_options
     command = self
+    Trollop::die "need at least one queue name" if ARGV.empty?
     @options = Trollop::options(@args) do
       command.prepare_options(self) if command.respond_to?(:prepare_options)
 
