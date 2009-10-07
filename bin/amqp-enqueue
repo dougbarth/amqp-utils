@@ -18,6 +18,10 @@ class EnqueueCommand < AmqpUtils::Command
   def execute
     @queue = ARGV[0]
     @message = ARGV[1]
+    unless @message
+      puts 'You need to include message'
+      exit 1
+    end
 
     publisher = EM.spawn do |queue, message, messages, options|
       if messages > 0
@@ -32,7 +36,7 @@ class EnqueueCommand < AmqpUtils::Command
       end
     end
 
-    publisher.notify(@queue, @message, options.count, options)
+    publisher.notify(@queue, @message, options[:count], options)
   end
 end
 
