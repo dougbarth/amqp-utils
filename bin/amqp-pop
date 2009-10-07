@@ -11,6 +11,10 @@ class PopCommand < AmqpUtils::Command
     }.margin
   end
 
+  def validate
+    raise "need a queue name" unless args[0] && !args[0].empty?
+  end
+
   def execute
     @queue = args[0]
 

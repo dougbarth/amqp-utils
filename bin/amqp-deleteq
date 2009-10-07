@@ -11,6 +11,10 @@ class QueueDeleteCommand < AmqpUtils::Command
     }.margin
   end
 
+  def validate
+    raise "need at least one queue name" unless args[0] && !args[0].empty?
+  end
+
   def execute
     @queues = ARGV
     def @queues.delete_or_stop

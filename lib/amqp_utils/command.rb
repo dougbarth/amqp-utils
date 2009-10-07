@@ -5,7 +5,10 @@ class AmqpUtils::Command
     def run(args = ARGV)
       command = new(args)
       command.process_options
+      command.validate
       command.go
+    rescue RuntimeError => e
+      Trollop::die(e.message)
     end
   end
 
@@ -17,7 +20,6 @@ class AmqpUtils::Command
 
   def process_options
     command = self
-    Trollop::die "need at least one queue name" if ARGV.empty?
     @options = Trollop::options(@args) do
       command.prepare_options(self) if command.respond_to?(:prepare_options)
 
@@ -33,6 +35,14 @@ class AmqpUtils::Command
       opt :timeout, 'The connect timeout in seconds', :default => 5
       opt :verbose, 'Print all AMQP commands sent and received.'
     end
+  end
+
+  # Called to validate that the supplied command line options and arguments
+  # are valid. If there is a problem with the supplied values, and exception
+  # should be raised.
+  #
+  # Subclasses show override this method and do their validation.
+  def validate
   end
 
   def command_name

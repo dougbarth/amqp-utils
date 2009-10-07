@@ -11,10 +11,14 @@ class DequeueCommand < AmqpUtils::Command
     }.margin
   end
 
+  def validate
+    raise "need at least one queue name" if args.empty?
+  end
+
   def execute
     @queues = ARGV
     @queues.each do |queue|
-      puts "Dequeueing from #{queue}..."
+      puts "Dequeueing from #{queue} (^C to stop)..."
       mq = MQ.new
 
       process_message = lambda do |header, message|

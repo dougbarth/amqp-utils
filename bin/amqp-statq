@@ -7,8 +7,12 @@ class QueueStatCommand < AmqpUtils::Command
     options.banner %Q{
     |Gets statistics on the queues specified.
     |
-    |  #{command_name} <queue> [<another_queue> ..]
+    |  #{command_name} <queue> [<another_queue> ...]
     }.margin
+  end
+
+  def validate
+    raise "need at least one queue name" unless args[0] && !args[0].empty?
   end
 
   def execute
