@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require 'clio/progressbar'
 
 class EnqueueCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -24,14 +25,17 @@ class EnqueueCommand < AmqpUtils::Command
     @queue, @message = args
 
     publisher = EM.spawn do |queue, message, messages, options|
+      @progress ||= Clio::Progressbar.new('Enqueuing', options[:count])
+
       if messages > 0
         @mq ||= MQ.new
         @mq.queue(queue, :durable => true, :auto_delete => false).
           publish(message, :persistent => options.persistent)
 
-        print '.'; STDOUT.flush
+        @progress.inc
         publisher.notify(queue, message, messages - 1, options)
       else
+        @progress.finish
         EM.next_tick { AMQP.stop { EM.stop } }
       end
     end

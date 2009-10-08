@@ -56,17 +56,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<tmm1-amqp>, [">= 0.6.4"])
-      s.add_runtime_dependency(%q<trollop>, [">= 1.10.2"])
-      s.add_runtime_dependency(%q<facets>, [">= 2.4.4"])
+      s.add_runtime_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+      s.add_runtime_dependency(%q<trollop>, ["~> 1.10.2"])
+      s.add_runtime_dependency(%q<facets>, ["~> 2.7.0"])
+      s.add_runtime_dependency(%q<clio>, ["~> 0.3.0"])
     else
-      s.add_dependency(%q<tmm1-amqp>, [">= 0.6.4"])
-      s.add_dependency(%q<trollop>, [">= 1.10.2"])
-      s.add_dependency(%q<facets>, [">= 2.4.4"])
+      s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+      s.add_dependency(%q<trollop>, ["~> 1.10.2"])
+      s.add_dependency(%q<facets>, ["~> 2.7.0"])
+      s.add_dependency(%q<clio>, ["~> 0.3.0"])
     end
   else
-    s.add_dependency(%q<tmm1-amqp>, [">= 0.6.4"])
-    s.add_dependency(%q<trollop>, [">= 1.10.2"])
-    s.add_dependency(%q<facets>, [">= 2.4.4"])
+    s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+    s.add_dependency(%q<trollop>, ["~> 1.10.2"])
+    s.add_dependency(%q<facets>, ["~> 2.7.0"])
+    s.add_dependency(%q<clio>, ["~> 0.3.0"])
   end
 end

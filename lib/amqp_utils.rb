@@ -15,4 +15,6 @@ require 'mq'
 
 gem 'facets'
 require 'facets/string/tab'
-require 'facets/consoleutils'
+
+gem 'clio'
+require 'clio/consoleutils'

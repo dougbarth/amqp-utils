@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../amqp_utils'
 
 class AmqpUtils::Command
-  include ConsoleUtils
+  include Clio::Terminal
 
   class << self
     def run(args = ARGV)
