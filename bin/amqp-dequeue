@@ -7,7 +7,7 @@ class DequeueCommand < AmqpUtils::Command
     options.banner %Q{
     |Removes messages from the supplied queues and displays them on STDOUT.
     |
-    |  #{command_name} <queue>[, <another queue>, ...]
+    |  #{command_name} <queue> [<another queue> ...]
     }.margin
   end
 
