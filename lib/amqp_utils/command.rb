@@ -16,11 +16,16 @@ class AmqpUtils::Command
     @args = args
   end
 
+  def version
+    IO.read(File.join(File.dirname(__FILE__), '..', '..', 'VERSION'))
+  end
+
   attr_reader :args, :options
 
   def process_options
     command = self
     @options = Trollop::options(@args) do
+      version(command.version)
       command.prepare_options(self) if command.respond_to?(:prepare_options)
 
       banner %Q{
