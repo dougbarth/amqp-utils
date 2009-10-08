@@ -1,0 +1,47 @@
+#!/usr/bin/ruby
+
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+
+# Monkey patching in purge support.
+#
+# TODO: submit this change back to the AMQP project.
+class MQ::Queue
+  def purge(options = {})
+    @mq.callback {
+      @mq.send Protocol::Queue::Purge.new({:queue => name,
+                                           :nowait => true}.merge(options))
+    }
+  end
+end
+
+class PurgeCommand < AmqpUtils::Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Removes all messages from the supplied queues.
+    |
+    |  #{command_name} <queue> [<another queue> ...]
+    }.margin
+  end
+
+  def validate
+    raise "need at least one queue name" if args.empty?
+  end
+
+  def execute
+    mq = MQ.new
+    @queues = args
+    purge_one = lambda do
+      queue = @queues.shift
+      puts "Purging #{queue}..."
+      mq.queue(queue).purge
+      if @queues.empty?
+        AMQP.stop { EM.stop }
+      else
+        EM.next_tick(&purge_one)
+      end
+    end
+    EM.next_tick(&purge_one)
+  end
+end
+
+PurgeCommand.run
