@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
@@ -16,7 +16,7 @@ class QueueDeleteCommand < AmqpUtils::Command
   end
 
   def execute
-    @queues = ARGV
+    @queues = args
     def @queues.delete_or_stop
       queue = pop
       if queue

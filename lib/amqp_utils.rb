@@ -10,8 +10,9 @@ require 'rubygems'
 gem 'trollop'
 require 'trollop'
 
-gem 'amqp'
+gem 'tmm1-amqp'
 require 'mq'
 
 gem 'facets'
 require 'facets/string/tab'
+require 'facets/consoleutils'

@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
@@ -16,10 +16,10 @@ class QueueStatCommand < AmqpUtils::Command
   end
 
   def execute
-    @queues = ARGV
+    @queues = args
 
     @queues.each do |queue|
-      MQ.new.queue(queue, :passive => true).status do |size, consumers|
+      mq.queue(queue, :passive => true).status do |size, consumers|
         puts "Queue <#{queue}>: #{size} message(s), #{consumers} consumer(s)"
 
         @queues.delete(queue)

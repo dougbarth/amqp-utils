@@ -1,14 +1,20 @@
 require File.dirname(__FILE__) + '/../amqp_utils'
 
 class AmqpUtils::Command
+  include ConsoleUtils
+
   class << self
     def run(args = ARGV)
       command = new(args)
       command.process_options
-      command.validate
+
+      begin
+        command.validate
+      rescue RuntimeError => e
+        Trollop::die(e.message)
+      end
+
       command.go
-    rescue RuntimeError => e
-      Trollop::die(e.message)
     end
   end
 
@@ -35,11 +41,16 @@ class AmqpUtils::Command
       opt :host, 'The AMQP host to connect to', :short => 'H', :default => 'localhost'
       opt :port, 'The AMQP port to connect to', :short => 'P', :default => 5672
       opt :vhost, 'The vhost to connect to', :short => 'V', :default => '/'
-      opt :user, 'The user name to authenticate with', :default => 'guest'
-      opt :password, 'The password to connect with', :default => 'guest'
-      opt :timeout, 'The connect timeout in seconds', :default => 5
-      opt :verbose, 'Print all AMQP commands sent and received.'
+      opt :user, 'The user name to authenticate with', :default => 'guest', :short => 'u'
+      opt :prompt, 'Prompt the user for a password', :short => 'p'
+      opt :password, 'The password to connect with.', :default => 'guest', :short => :none
+      conflicts(:prompt, :password)
+      opt :timeout, 'The connect timeout in seconds', :default => 5, :short => 't'
+      opt :verbose, 'Print all AMQP commands sent and received.', :short => 'v'
     end
+
+    @args = @args.dup
+    ARGV.clear
   end
 
   # Called to validate that the supplied command line options and arguments
@@ -55,23 +66,42 @@ class AmqpUtils::Command
   end
 
   def go
-    EM.run do
-      %w(host port vhost user timeout).each do |val|
-        AMQP.settings[val.to_sym] = options[val.to_sym]
-      end
-      AMQP.settings[:pass] = options.password
-      AMQP.logging = options.verbose
+    if options.prompt
+      options[:password] = password()
+      puts
+    end
 
-      trap("INT") do
-        if @nice_tried
-          EM.stop
-        else
-          AMQP.stop { EM.stop }
-          @nice_tried = true
+    %w(host port vhost user timeout).each do |val|
+      AMQP.settings[val.to_sym] = options[val.to_sym]
+    end
+    AMQP.settings[:pass] = options.password
+    AMQP.logging = options.verbose
+
+    trap("INT") do
+      if @nice_tried
+        EM.stop
+      else
+        AMQP.stop { EM.stop }
+        @nice_tried = true
+      end
+    end
+
+    EM.run do
+      amqp.connection_status do |status|
+        if status == :disconnected
+          Trollop::die "disconnected from #{AMQP.settings[:host]}:#{AMQP.settings[:port]}"
         end
       end
 
-      execute
+      mq.callback { execute }
     end
+  end
+
+  def amqp
+    @amqp ||= AMQP.start
+  end
+
+  def mq
+    @mq ||= MQ.new
   end
 end
