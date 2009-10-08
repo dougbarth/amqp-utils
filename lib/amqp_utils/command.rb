@@ -27,9 +27,9 @@ class AmqpUtils::Command
       |
       |Standard options:
       }.margin
-      opt :host, 'The AMQP host to connect to', :default => 'localhost'
-      opt :port, 'The AMQP port to connect to', :default => 5672
-      opt :vhost, 'The vhost to connect to', :default => '/'
+      opt :host, 'The AMQP host to connect to', :short => 'H', :default => 'localhost'
+      opt :port, 'The AMQP port to connect to', :short => 'P', :default => 5672
+      opt :vhost, 'The vhost to connect to', :short => 'V', :default => '/'
       opt :user, 'The user name to authenticate with', :default => 'guest'
       opt :password, 'The password to connect with', :default => 'guest'
       opt :timeout, 'The connect timeout in seconds', :default => 5
