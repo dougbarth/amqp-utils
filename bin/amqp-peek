@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
 
 class PeekCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -12,7 +13,11 @@ class PeekCommand < AmqpUtils::Command
     |  NOTE: This operation does have side effects on the server. The message is
     |        placed at the end of the queue after returning from this method. The
     |        message is also marked as being redelivered.
+    |
+    |Peek options:
     }.margin
+    options.opt :format, 'The format that the messages should be displayed as',
+      :short => :none, :default => 'pretty'
   end
 
   def validate
@@ -21,17 +26,13 @@ class PeekCommand < AmqpUtils::Command
 
   def execute
     @queue = args[0]
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
 
     mq = MQ.new
-
     mq.queue(@queue).pop(:ack => true) do |header, message|
       if message
         puts "(#{@queue})"
-        puts "  Header: "
-        header.properties.each do |key, value|
-          puts "    #{key.inspect} => #{value.inspect}"
-        end
-        puts "  Message: #{message.inspect}"
+        @formatter.generate(STDOUT, header, message)
       else
         puts "(#{@queue}) empty"
       end

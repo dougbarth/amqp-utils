@@ -15,6 +15,11 @@ require 'mq'
 
 gem 'facets'
 require 'facets/string/tab'
+require 'facets/kernel/returning'
+require 'facets/module/basename'
 
 gem 'clio'
 require 'clio/consoleutils'
+
+gem 'json'
+require 'json'

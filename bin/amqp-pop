@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
 
 class PopCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -8,7 +9,11 @@ class PopCommand < AmqpUtils::Command
     |Pops a single message from the queue.
     |
     |   #{command_name} <queue>
+    |
+    |Pop options:
     }.margin
+    options.opt :format, 'The format that the messages should be displayed as',
+      :short => :none, :default => 'pretty'
   end
 
   def validate
@@ -17,16 +22,13 @@ class PopCommand < AmqpUtils::Command
 
   def execute
     @queue = args[0]
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
 
     mq = MQ.new
     mq.queue(@queue).pop do |header, message|
       if message
         puts "(#{@queue})"
-        puts "  Header: "
-        header.properties.each do |key, value|
-          puts "    #{key.inspect} => #{value.inspect}"
-        end
-        puts "  Message: #{message.inspect}"
+        @formatter.generate(STDOUT, header, message)
       else
         puts "(#{@queue}) empty"
       end

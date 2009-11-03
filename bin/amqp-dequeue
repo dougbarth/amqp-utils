@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
 
 class DequeueCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -8,7 +9,13 @@ class DequeueCommand < AmqpUtils::Command
     |Removes messages from the supplied queues and displays them on STDOUT.
     |
     |  #{command_name} <queue> [<another queue> ...]
+    |
+    |Dequeue options:
     }.margin
+    options.opt :format, 'The format that the messages should be displayed as',
+      :short => :none, :default => 'pretty'
+    options.opt :quiet, 'Suppresses non-message content output',
+      :short => 'q', :default => false
   end
 
   def validate
@@ -17,16 +24,17 @@ class DequeueCommand < AmqpUtils::Command
 
   def execute
     @queues = args
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
+
     @queues.each do |queue|
-      puts "Dequeueing from #{queue} (^C to stop)..."
+      puts "Dequeueing from #{queue} (^C to stop)..." unless options[:quiet]
       mq = MQ.new
 
       process_message = lambda do |header, message|
-        puts "(#{queue})"
-        puts "  Header: #{header.properties.inspect}"
-        puts "  Message: #{message.inspect}"
+        puts "(#{queue})" unless options[:quiet]
+        @formatter.generate(STDOUT, header, message)
       end
-      mq.queue(queue).subscribe &process_message
+      mq.queue(queue).subscribe(&process_message)
     end
   end
 end
