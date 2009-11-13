@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{amqp-utils}
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Doug Barth"]
-  s.date = %q{2009-10-08}
+  s.date = %q{2009-11-13}
   s.description = %q{Command line utilies for interacting with AMQP compliant queues.
       The intention is provide simple management tools that can be used to complete ad hoc
       housework on an AMQP queue. In addition, simple scripts can be layered over the tools
@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
      "bin/amqp-statq",
      "lib/amqp_utils.rb",
      "lib/amqp_utils/command.rb",
+     "lib/amqp_utils/message_formatter.rb",
      "test/test_amqp_utils.rb",
      "test/test_helper.rb"
   ]
@@ -60,16 +61,19 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<trollop>, ["~> 1.10.2"])
       s.add_runtime_dependency(%q<facets>, ["~> 2.7.0"])
       s.add_runtime_dependency(%q<clio>, ["~> 0.3.0"])
+      s.add_runtime_dependency(%q<json>, ["~> 1.1.6"])
     else
       s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
       s.add_dependency(%q<trollop>, ["~> 1.10.2"])
       s.add_dependency(%q<facets>, ["~> 2.7.0"])
       s.add_dependency(%q<clio>, ["~> 0.3.0"])
+      s.add_dependency(%q<json>, ["~> 1.1.6"])
     end
   else
     s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
     s.add_dependency(%q<trollop>, ["~> 1.10.2"])
     s.add_dependency(%q<facets>, ["~> 2.7.0"])
     s.add_dependency(%q<clio>, ["~> 0.3.0"])
+    s.add_dependency(%q<json>, ["~> 1.1.6"])
   end
 end
