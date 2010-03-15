@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{amqp-utils}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Doug Barth"]
@@ -57,20 +57,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+      s.add_runtime_dependency(%q<amqp>, ["~> 0.6.4"])
       s.add_runtime_dependency(%q<trollop>, ["~> 1.10.2"])
       s.add_runtime_dependency(%q<facets>, ["~> 2.7.0"])
       s.add_runtime_dependency(%q<clio>, ["~> 0.3.0"])
       s.add_runtime_dependency(%q<json>, ["~> 1.1.6"])
     else
-      s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+      s.add_dependency(%q<amqp>, ["~> 0.6.4"])
       s.add_dependency(%q<trollop>, ["~> 1.10.2"])
       s.add_dependency(%q<facets>, ["~> 2.7.0"])
       s.add_dependency(%q<clio>, ["~> 0.3.0"])
       s.add_dependency(%q<json>, ["~> 1.1.6"])
     end
   else
-    s.add_dependency(%q<tmm1-amqp>, ["~> 0.6.4"])
+    s.add_dependency(%q<amqp>, ["~> 0.6.4"])
     s.add_dependency(%q<trollop>, ["~> 1.10.2"])
     s.add_dependency(%q<facets>, ["~> 2.7.0"])
     s.add_dependency(%q<clio>, ["~> 0.3.0"])
