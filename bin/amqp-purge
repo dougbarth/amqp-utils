@@ -2,18 +2,6 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
-# Monkey patching in purge support.
-#
-# TODO: submit this change back to the AMQP project.
-class MQ::Queue
-  def purge(options = {})
-    @mq.callback {
-      @mq.send Protocol::Queue::Purge.new({:queue => name,
-                                           :nowait => true}.merge(options))
-    }
-  end
-end
-
 class PurgeCommand < AmqpUtils::Command
   def prepare_options(options)
     options.banner %Q{
@@ -33,7 +21,7 @@ class PurgeCommand < AmqpUtils::Command
     purge_one = lambda do
       queue = @queues.shift
       puts "Purging #{queue}..."
-      mq.queue(queue).purge
+      mq.queue(queue, :passive => true).purge
       if @queues.empty?
         AMQP.stop { EM.stop }
       else
