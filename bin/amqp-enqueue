@@ -14,9 +14,13 @@ class EnqueueCommand < AmqpUtils::Command
     }.margin
     options.opt :persistent, 'Mark messages as persistent.', :short => :none
     options.opt :count, 'Number of times the message should be published.', :type => :int, :default => 1
+    options.opt :header, 'A key-value pair to be set in "headers" field of the AMQP header', :short => :none, :type => :string, :multi => true
   end
 
   def validate
+    options[:header] = Hash[*(options[:header].map do |h|
+      h.split('=')
+    end.flatten)]
     raise "need a queue to publish to" unless args[0] && !args[0].empty?
     raise "need a message to publish" unless args[1] && !args[1].empty?
   end
@@ -29,8 +33,9 @@ class EnqueueCommand < AmqpUtils::Command
 
       if messages > 0
         @mq ||= MQ.new
+        headers = options[:header]
         @mq.queue(queue, :durable => true, :auto_delete => false).
-          publish(message, :persistent => options.persistent)
+          publish(message, :persistent => options.persistent, :headers => headers)
 
         @progress.inc
         publisher.notify(queue, message, messages - 1, options)
