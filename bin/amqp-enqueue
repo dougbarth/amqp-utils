@@ -8,25 +8,28 @@ class EnqueueCommand < AmqpUtils::Command
     options.banner %Q{
     |Publishes a message to a particular queue.
     |
-    |  #{command_name} <queue> <message>
+    |  #{command_name} <queue>
     |
     |Enqueue options:
     }.margin
     options.opt :persistent, 'Mark messages as persistent.', :short => :none
     options.opt :count, 'Number of times the message should be published.', :type => :int, :default => 1
     options.opt :header, 'A key-value pair to be set in "headers" field of the AMQP header', :short => :none, :type => :string, :multi => true
+    options.opt :message, 'The message to publish to the queue. Comes from STDIN if not provided.', :type => :string, :default => nil
   end
 
   def validate
-    options[:header] = Hash[*(options[:header].map do |h|
-      h.split('=')
-    end.flatten)]
+    if options[:header]
+      options[:header] = Hash[*(options[:header].map do |h|
+        h.split('=')
+      end.flatten)]
+    end
     raise "need a queue to publish to" unless args[0] && !args[0].empty?
-    raise "need a message to publish" unless args[1] && !args[1].empty?
   end
 
   def execute
-    @queue, @message = args
+    @queue = args
+    @message = options[:message] || STDIN.read
 
     publisher = EM.spawn do |queue, message, messages, options|
       @progress ||= Clio::Progressbar.new('Enqueuing', options[:count])
