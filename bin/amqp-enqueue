@@ -13,6 +13,7 @@ class EnqueueCommand < AmqpUtils::Command
     |Enqueue options:
     }.margin
     options.opt :persistent, 'Mark messages as persistent.', :short => :none
+    options.opt :priority, 'The priority of this message', :type => :int, :short => :none, :default => 1
     options.opt :count, 'Number of times the message should be published.', :type => :int, :default => 1
     options.opt :header, 'A key-value pair to be set in "headers" field of the AMQP header', :short => :none, :type => :string, :multi => true
     options.opt :message, 'The message to publish to the queue. Comes from STDIN if not provided.', :type => :string, :default => nil
@@ -38,7 +39,7 @@ class EnqueueCommand < AmqpUtils::Command
         @mq ||= MQ.new
         headers = options[:header]
         @mq.queue(queue, :durable => true, :auto_delete => false).
-          publish(message, :persistent => options.persistent, :headers => headers)
+          publish(message, :persistent => options.persistent, :headers => headers, :priority => options.priority)
 
         @progress.inc
         publisher.notify(queue, message, messages - 1, options)
