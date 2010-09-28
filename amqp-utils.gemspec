@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{amqp-utils}
-  s.version = "0.2.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Doug Barth"]
-  s.date = %q{2010-03-15}
+  s.date = %q{2010-09-28}
   s.description = %q{Command line utilies for interacting with AMQP compliant queues.
       The intention is provide simple management tools that can be used to complete ad hoc
       housework on an AMQP queue. In addition, simple scripts can be layered over the tools
