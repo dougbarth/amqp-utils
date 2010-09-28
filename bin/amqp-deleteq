@@ -20,7 +20,7 @@ class QueueDeleteCommand < AmqpUtils::Command
     def @queues.delete_or_stop
       queue = pop
       if queue
-        puts "Deleteing #{queue}..."
+        puts "Deleting #{queue}..."
         MQ.new.queue(queue).delete
         EM.next_tick { delete_or_stop }
       else
