@@ -8,7 +8,19 @@ class QueueDeleteCommand < AmqpUtils::Command
     |Deletes the supplied queues.
     |
     |  #{command_name} <queue> [<another queue> ...]
+    |
+    | Delete queue options:
     }.margin
+    options.opt :passive, "Queue is marked as passive",
+      :short => :none, :default => false
+    options.opt :durable, "Queue is marked as durable",
+      :short => :none, :default => false
+    options.opt :exclusive, "Queue is marked as exclusive",
+      :short => :none, :default => false
+    options.opt :auto_delete, "Queue is deleted when all consumers have finished using it",
+      :short => :none, :default => false
+    options.opt :nowait, "Client should not wait for a reply method",
+      :short => :none, :default => true
   end
 
   def validate
@@ -17,18 +29,24 @@ class QueueDeleteCommand < AmqpUtils::Command
 
   def execute
     @queues = args
-    def @queues.delete_or_stop
+
+    queues_options = {}
+    %w(passive durable exclusive auto_delete nowait).each do |option|
+      queues_options[option.to_sym] = options[option.to_sym]
+    end
+
+    def @queues.delete_or_stop(options)
       queue = pop
       if queue
         puts "Deleting #{queue}..."
-        MQ.new.queue(queue).delete
-        EM.next_tick { delete_or_stop }
+        MQ.new.queue(queue, options).delete
+        EM.next_tick { delete_or_stop(options) }
       else
         AMQP.stop { EM.stop }
       end
     end
 
-    EM.next_tick { @queues.delete_or_stop }
+    EM.next_tick { @queues.delete_or_stop(queues_options) }
   end
 end
 
