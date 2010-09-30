@@ -21,7 +21,7 @@ class QueueDeleteCommand < AmqpUtils::Command
       queue = pop
       if queue
         puts "Deleting #{queue}..."
-        MQ.new.queue(queue).delete
+        MQ.new.queue(queue, :passive => true).delete
         EM.next_tick { delete_or_stop }
       else
         AMQP.stop { EM.stop }
