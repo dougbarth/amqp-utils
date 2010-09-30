@@ -14,7 +14,12 @@ class AmqpUtils::Command
         Trollop::die(e.message)
       end
 
-      command.go
+      begin
+        command.go
+      rescue => e
+        STDERR.puts e.message
+        exit 1
+      end
     end
   end
 
