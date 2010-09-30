@@ -50,4 +50,8 @@ class QueueDeleteCommand < AmqpUtils::Command
   end
 end
 
-QueueDeleteCommand.run
+begin
+  QueueDeleteCommand.run
+rescue => e
+  puts "Error: #{e.message}"
+end
