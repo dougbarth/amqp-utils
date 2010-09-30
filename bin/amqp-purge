@@ -12,7 +12,7 @@ class PurgeCommand < AmqpUtils::Command
   end
 
   def validate
-    raise "need at least one queue name" if args.empty?
+    Trollop::die "need at least one queue name" if args.empty?
   end
 
   def execute

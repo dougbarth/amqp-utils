@@ -17,12 +17,14 @@ class PopCommand < AmqpUtils::Command
   end
 
   def validate
-    raise "need a queue name" unless args[0] && !args[0].empty?
+    Trollop::die "need a queue name" unless args[0] && !args[0].empty?
+
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
+    Trollop::die :format, "not an available type: #{AmqpUtils::MessageFormatter.types.join(", ")}" unless @formatter
   end
 
   def execute
     @queue = args[0]
-    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
 
     mq = MQ.new
     mq.queue(@queue, :passive => true).pop do |header, message|

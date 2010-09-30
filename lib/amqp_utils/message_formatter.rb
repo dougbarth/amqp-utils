@@ -3,7 +3,12 @@ class AmqpUtils::MessageFormatter
     @@formatters ||= {}
 
     def for_type(format_type)
-      @@formatters[format_type.downcase].new
+      klass = @@formatters[format_type.downcase]
+      klass && klass.new
+    end
+
+    def types
+      @@formatters.keys
     end
 
     def register_formatter(formatter, format_type)

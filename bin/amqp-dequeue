@@ -19,12 +19,14 @@ class DequeueCommand < AmqpUtils::Command
   end
 
   def validate
-    raise "need at least one queue name" if args.empty?
+    Trollop::die "need at least one queue name" if args.empty?
+
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
+    Trollop::die :format, "not an available type: #{AmqpUtils::MessageFormatter.types.join(", ")}" unless @formatter
   end
 
   def execute
     @queues = args
-    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
 
     @queues.each do |queue|
       puts "Dequeueing from #{queue} (^C to stop)..." unless options[:quiet]

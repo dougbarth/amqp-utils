@@ -25,7 +25,7 @@ class EnqueueCommand < AmqpUtils::Command
         h.split('=')
       end.flatten)]
     end
-    raise "need a queue to publish to" unless args[0] && !args[0].empty?
+    Trollop::die "need a queue to publish to" unless args[0] && !args[0].empty?
   end
 
   def execute

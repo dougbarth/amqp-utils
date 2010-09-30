@@ -7,12 +7,7 @@ class AmqpUtils::Command
     def run(args = ARGV)
       command = new(args)
       command.process_options
-
-      begin
-        command.validate
-      rescue RuntimeError => e
-        Trollop::die(e.message)
-      end
+      command.validate
 
       begin
         command.go
@@ -60,10 +55,10 @@ class AmqpUtils::Command
   end
 
   # Called to validate that the supplied command line options and arguments
-  # are valid. If there is a problem with the supplied values, and exception
-  # should be raised.
+  # are valid. If there is a problem with the supplied values, Trollop::die
+  # should be called.
   #
-  # Subclasses show override this method and do their validation.
+  # Subclasses should override this method and do their validation.
   def validate
   end
 

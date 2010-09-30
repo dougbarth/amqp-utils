@@ -12,7 +12,7 @@ class QueueDeleteCommand < AmqpUtils::Command
   end
 
   def validate
-    raise "need at least one queue name" unless args[0] && !args[0].empty?
+    Trollop::die "need at least one queue name" unless args[0] && !args[0].empty?
   end
 
   def execute
