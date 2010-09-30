@@ -18,6 +18,7 @@ class AmqpUtils::Command
         command.go
       rescue => e
         STDERR.puts e.message
+        STDERR.puts e.backtrace.join("\n") if command.options.verbose
         exit 1
       end
     end
