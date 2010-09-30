@@ -34,7 +34,7 @@ class DequeueCommand < AmqpUtils::Command
         puts "(#{queue})" unless options[:quiet]
         @formatter.generate(STDOUT, header, message)
       end
-      mq.queue(queue).subscribe(&process_message)
+      mq.queue(queue, :passive => true).subscribe(&process_message)
     end
   end
 end

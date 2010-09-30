@@ -29,7 +29,7 @@ class PeekCommand < AmqpUtils::Command
     @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
 
     mq = MQ.new
-    mq.queue(@queue).pop(:ack => true) do |header, message|
+    mq.queue(@queue, :passive => true).pop(:ack => true) do |header, message|
       if message
         puts "(#{@queue})"
         @formatter.generate(STDOUT, header, message)
