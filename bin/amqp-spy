@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
+
+class SpyCommand < AmqpUtils::Command
+  def prepare_options(options)
+    options.banner %Q{
+    |Spies on a specific exchange and routing key.
+    |
+    |   #{command_name} <exchange> [<routing_key>]
+    |
+    |Spy options:
+    }.margin
+    options.opt :fanout, "Fanout exchange", :short => "F"
+    options.opt :direct, "Direct exchange", :short => "D"
+    options.opt :topic, "Topic exchange", :short => 'T'
+    options.opt :durable, 'Is the exchange durable?', :short => 'd'
+    options.opt :auto_delete, 'Is it an auto-deleted exchange?', :short => 'a'
+    options.opt :format, 'The format that the messages should be displayed as',
+      :short => :none, :default => 'pretty'
+  end
+
+  def validate
+    Trollop::die "needs an exchange name" unless args[0] && !args[0].empty?
+    if !options[:fanout] && !options[:direct] && !options[:topic]
+      Trollop::die "one of the fanout, direct, or topic options are required"
+    end
+
+    @formatter = AmqpUtils::MessageFormatter.for_type(options[:format])
+    Trollop::die :format, "not an available type: #{AmqpUtils::MessageFormatter.types.join(", ")}" unless @formatter
+  end
+
+  def execute
+    options[:type] = (options[:fanout]) ? :fanout : ((options[:direct]) ? :direct : :topic)
+    @exchange_name = args[0]
+    @routing_key = (options[:type] != :fanout) ? (args[1] || '*') : nil
+    spy_queue = "amqp-spy.#{@routing_key}." + (0...6).map{ (('a'..'f').to_a + (0..9).to_a)[rand(16)] }.join
+    
+    mq = MQ.new
+    
+    exchange = MQ::Exchange.new(mq, options[:type], @exchange_name, :durable => options[:durable],
+      :auto_delete => options[:auto_delete])
+    
+    queue = MQ::Queue.new(mq, spy_queue, :auto_delete => true)
+    queue.bind(exchange, :routing_key => @routing_key)
+    
+    queue.subscribe do |header, message|
+      @formatter.generate(STDOUT, header, message)
+    end
+  end
+end
+
+SpyCommand.run
