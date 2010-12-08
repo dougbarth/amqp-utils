@@ -20,32 +20,31 @@ Gem::Specification.new do |s|
     "README.txt"
   ]
   s.files = [
-    ".gitignore",
-     "History.txt",
-     "License.txt",
-     "README.txt",
-     "Rakefile",
-     "TODO.txt",
-     "VERSION",
-     "amqp-utils.gemspec",
-     "bin/amqp-deleteq",
-     "bin/amqp-dequeue",
-     "bin/amqp-enqueue",
-     "bin/amqp-peek",
-     "bin/amqp-pop",
-     "bin/amqp-purge",
-     "bin/amqp-statq",
-     "lib/amqp_utils.rb",
-     "lib/amqp_utils/command.rb",
-     "lib/amqp_utils/message_formatter.rb",
-     "test/test_amqp_utils.rb",
-     "test/test_helper.rb"
+    "History.txt",
+    "License.txt",
+    "README.txt",
+    "Rakefile",
+    "TODO.txt",
+    "VERSION",
+    "amqp-utils.gemspec",
+    "bin/amqp-deleteq",
+    "bin/amqp-dequeue",
+    "bin/amqp-enqueue",
+    "bin/amqp-peek",
+    "bin/amqp-pop",
+    "bin/amqp-purge",
+    "bin/amqp-spy",
+    "bin/amqp-statq",
+    "lib/amqp_utils.rb",
+    "lib/amqp_utils/command.rb",
+    "lib/amqp_utils/message_formatter.rb",
+    "test/test_amqp_utils.rb",
+    "test/test_helper.rb"
   ]
   s.homepage = %q{http://github.com/dougbarth/amqp-utils}
-  s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{amqp-utils}
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Command line utilities for interacting with AMQP compliant queues}
   s.test_files = [
     "test/test_amqp_utils.rb",
