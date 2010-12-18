@@ -24,14 +24,11 @@ class SpyCommand < AmqpUtils::Command
   end
 
   def execute
-    options[:type] = (options[:fanout]) ? :fanout : ((options[:direct]) ? :direct : :topic)
     @exchange_name = args[0]
-    @routing_key = (options[:type] != :fanout) ? (args[1] || '*') : nil
+    @routing_key = args[1] || '*'
     spy_queue = "amqp-spy.#{@routing_key}." + (0...6).map{ (('a'..'f').to_a + (0..9).to_a)[rand(16)] }.join
     
-    mq = MQ.new
-    
-    queue = MQ::Queue.new(mq, spy_queue, :auto_delete => true)
+    queue = mq.queue(spy_queue, :auto_delete => true)
     queue.bind(@exchange_name, :routing_key => @routing_key)
     
     queue.subscribe do |header, message|
