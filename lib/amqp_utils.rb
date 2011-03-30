@@ -23,3 +23,6 @@ require 'clio/consoleutils'
 
 gem 'json'
 require 'json'
+
+gem 'heredoc_unindent'
+require 'heredoc_unindent'

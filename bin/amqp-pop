@@ -5,13 +5,13 @@ require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
 
 class PopCommand < AmqpUtils::Command
   def prepare_options(options)
-    options.banner %Q{
-    |Pops a single message from the queue.
-    |
-    |   #{command_name} <queue>
-    |
-    |Pop options:
-    }.margin
+    options.banner <<-BANNER.unindent
+    Pops a single message from the queue.
+    
+       #{command_name} <queue>
+    
+    Pop options:
+    BANNER
     options.opt :format, 'The format that the messages should be displayed as',
       :short => :none, :default => 'pretty'
   end

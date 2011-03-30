@@ -5,13 +5,13 @@ require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
 
 class SpyCommand < AmqpUtils::Command
   def prepare_options(options)
-    options.banner %Q{
-    |Spies on a specific exchange and routing key.
-    |
-    |   #{command_name} <exchange> [<routing_key>]
-    |
-    |Spy options:
-    }.margin
+    options.banner <<-BANNER.unindent
+    Spies on a specific exchange and routing key.
+    
+       #{command_name} <exchange> [<routing_key>]
+    
+    Spy options:
+    BANNER
     options.opt :format, 'The format that the messages should be displayed as',
       :short => :none, :default => 'pretty'
   end
@@ -27,10 +27,10 @@ class SpyCommand < AmqpUtils::Command
     @exchange_name = args[0]
     @routing_key = args[1] || '*'
     spy_queue = "amqp-spy.#{@routing_key}." + (0...6).map{ (('a'..'f').to_a + (0..9).to_a)[rand(16)] }.join
-    
+
     queue = mq.queue(spy_queue, :auto_delete => true)
     queue.bind(@exchange_name, :routing_key => @routing_key)
-    
+
     queue.subscribe do |header, message|
       @formatter.generate(STDOUT, header, message)
     end

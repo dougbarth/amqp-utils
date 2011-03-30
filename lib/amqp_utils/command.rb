@@ -35,10 +35,10 @@ class AmqpUtils::Command
       version(command.version)
       command.prepare_options(self) if command.respond_to?(:prepare_options)
 
-      banner %Q{
-      |
-      |Standard options:
-      }.margin
+      banner <<-END.unindent
+      
+      Standard options:
+      END
       opt :host, 'The AMQP host to connect to', :short => 'H', :default => 'localhost'
       opt :port, 'The AMQP port to connect to', :short => 'P', :default => 5672
       opt :vhost, 'The vhost to connect to', :short => 'V', :default => '/'

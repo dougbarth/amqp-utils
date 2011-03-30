@@ -5,13 +5,13 @@ require 'clio/progressbar'
 
 class EnqueueCommand < AmqpUtils::Command
   def prepare_options(options)
-    options.banner %Q{
-    |Publishes a message to a particular queue.
-    |
-    |  #{command_name} <queue>
-    |
-    |Enqueue options:
-    }.margin
+    options.banner <<-BANNER.unindent
+    Publishes a message to a particular queue.
+    
+      #{command_name} <queue>
+    
+    Enqueue options:
+    BANNER
     options.opt :persistent, 'Mark messages as persistent.', :short => :none
     options.opt :priority, 'The priority of this message', :type => :int, :short => :none, :default => 1
     options.opt :count, 'Number of times the message should be published.', :type => :int, :default => 1
