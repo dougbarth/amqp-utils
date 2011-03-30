@@ -11,7 +11,7 @@ gem 'trollop'
 require 'trollop'
 
 gem 'amqp'
-require 'mq'
+require 'amqp'
 
 gem 'facets'
 require 'facets/string/tab'
