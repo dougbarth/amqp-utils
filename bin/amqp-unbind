@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
+
+class UnbindCommand < AmqpUtils::Command
+  def prepare_options(options)
+    options.banner <<-BANNER.unindent
+    Unbind a specific queue from a exchange with routing key.
+    
+       #{command_name} <queue> <exchange> [<routing_key>]
+    BANNER
+  end
+
+  def validate
+    Trollop::die "need a queue and an exchange names to unbind" if args.size < 2
+  end
+
+  def execute
+    @queue_name    = args[0]
+    @exchange_name = args[1]
+    @routing_key   = args[2]
+
+    puts "Unbinding queue '#{@queue_name}' from exchange '#{@exchange_name}' with routing key '#{@routing_key}'..."
+
+    mq.queue(@queue_name, :passive => true).unbind(@exchange_name, :routing_key => @routing_key)
+
+    AMQP.stop { EM.stop }
+  end
+end
+
+UnbindCommand.run
