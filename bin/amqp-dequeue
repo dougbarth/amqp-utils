@@ -2,6 +2,7 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/serialization'
 
 class DequeueCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -34,7 +35,8 @@ class DequeueCommand < AmqpUtils::Command
 
       process_message = lambda do |header, message|
         puts "(#{queue})" unless options[:quiet]
-        @formatter.generate(STDOUT, header, message)
+        deserialized_message = AmqpUtils::Serialization.deserialize(header.properties[:content_type], message)
+        @formatter.generate(STDOUT, header, deserialized_message)
       end
       mq.queue(queue, :passive => true).subscribe(&process_message)
     end

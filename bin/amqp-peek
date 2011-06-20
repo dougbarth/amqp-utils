@@ -2,6 +2,7 @@
 
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 require File.dirname(__FILE__) + '/../lib/amqp_utils/message_formatter'
+require File.dirname(__FILE__) + '/../lib/amqp_utils/serialization'
 
 class PeekCommand < AmqpUtils::Command
   def prepare_options(options)
@@ -18,6 +19,8 @@ class PeekCommand < AmqpUtils::Command
     BANNER
     options.opt :format, 'The format that the messages should be displayed as',
       :short => :none, :default => 'pretty'
+    options.opt :quiet, 'Suppresses non-message content output',
+      :short => 'q', :default => false
   end
 
   def validate
@@ -33,8 +36,9 @@ class PeekCommand < AmqpUtils::Command
     mq = MQ.new
     mq.queue(@queue, :passive => true).pop(:ack => true) do |header, message|
       if message
-        puts "(#{@queue})"
-        @formatter.generate(STDOUT, header, message)
+        puts "(#{@queue})" unless options[:quiet]
+        deserialized_message = AmqpUtils::Serialization.deserialize(header.properties[:content_type], message)
+        @formatter.generate(STDOUT, header, deserialized_message)
       else
         puts "(#{@queue}) empty"
       end
