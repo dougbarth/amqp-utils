@@ -59,6 +59,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<clio>, ["~> 0.3.0"])
       s.add_runtime_dependency(%q<json>, ["~> 1.1.6"])
       s.add_runtime_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
+      s.add_runtime_dependency(%q<msgpack>, ["~> 0.4.5"])
     else
       s.add_dependency(%q<amqp>, ["~> 0.7.1"])
       s.add_dependency(%q<trollop>, ["~> 1.16.2"])
@@ -66,6 +67,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<clio>, ["~> 0.3.0"])
       s.add_dependency(%q<json>, ["~> 1.1.6"])
       s.add_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
+      s.add_dependency(%q<msgpack>, ["~> 0.4.5"])
     end
   else
     s.add_dependency(%q<amqp>, ["~> 0.7.1"])
@@ -74,6 +76,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<clio>, ["~> 0.3.0"])
     s.add_dependency(%q<json>, ["~> 1.1.6"])
     s.add_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
+    s.add_dependency(%q<msgpack>, ["~> 0.4.5"])
   end
 end
 

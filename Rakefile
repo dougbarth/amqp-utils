@@ -22,6 +22,7 @@ begin
     gem.add_dependency('clio', '~> 0.3.0')
     gem.add_dependency('json', '~> 1.1.6')
     gem.add_dependency('heredoc_unindent', '~> 1.1.2')
+    gem.add_dependency('msgpack', '~> 0.4.5')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
