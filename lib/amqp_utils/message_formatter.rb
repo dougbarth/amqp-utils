@@ -20,6 +20,14 @@ class AmqpUtils::MessageFormatter
     def self.inherited(klass)
       ::AmqpUtils::MessageFormatter.register_formatter(klass, klass.basename)
     end
+
+    def generate(io, header, message)
+      raise NotImplementedError, "#{self} does not know how to generate output"
+    end
+
+    def load(io)
+      raise NotImplementedError, "#{self} does not know how consume its output"
+    end
   end
 
   class Pretty < Base
@@ -37,11 +45,20 @@ class AmqpUtils::MessageFormatter
       json_obj = {'header' => header.properties, 'message' => message}
       io.puts ::JSON.generate(json_obj)
     end
+
+    def load(io)
+      next_line = io.gets
+      ::JSON.parse(next_line) if next_line
+    end
   end
 
   class Message < Base
     def generate(io, header, message)
       io.puts message
+    end
+
+    def load(io)
+      io.gets
     end
   end
 end
