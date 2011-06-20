@@ -91,6 +91,11 @@ class EnqueueCommand < AmqpUtils::Command
             :priority => options.priority,
             :content_type => options.content_type
           }
+          if header = message['header']
+            publish_options[:message_id] = header['message_id']
+            publish_options[:priority] = header['priority'] unless options.priority_given
+            publish_options[:expiration] = header['expiration']
+          end
 
           serialized_message = AmqpUtils::Serialization.serialize(options.content_type, message['message'])
 
