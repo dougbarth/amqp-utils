@@ -58,7 +58,8 @@ class AmqpUtils::MessageFormatter
     end
 
     def load(io)
-      io.gets
+      msg = io.gets
+      msg ? { 'message' => msg } : nil
     end
   end
 end
