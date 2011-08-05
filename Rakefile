@@ -18,9 +18,9 @@ begin
 
     gem.add_dependency('amqp', '~> 0.7.1')
     gem.add_dependency('trollop', '~> 1.16.2')
-    gem.add_dependency('facets', '~> 2.7.0')
+    gem.add_dependency('facets', '~> 2.9')
     gem.add_dependency('clio', '~> 0.3.0')
-    gem.add_dependency('json', '~> 1.1.6')
+    gem.add_dependency('json', '~> 1.5')
     gem.add_dependency('heredoc_unindent', '~> 1.1.2')
     gem.add_dependency('msgpack', '~> 0.4.5')
   end
