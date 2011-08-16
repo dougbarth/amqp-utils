@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'pp'
 require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
 
 class ExchnageDeleteCommand < AmqpUtils::Command
