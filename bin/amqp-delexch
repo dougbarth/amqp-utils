@@ -48,6 +48,7 @@ class ExchnageDeleteCommand < AmqpUtils::Command
         conn = AMQP::Channel.new
         exch = conn.__send__ :topic, exchange, {:durable => durable}
         puts "Deleting exchange #{exchange} (type=#{type}, durable=#{durable})..."
+        puts "WARNING: Queues might be left unbound"
         exch.delete
         EM.next_tick { delete_or_stop(type, durable) }
       else
