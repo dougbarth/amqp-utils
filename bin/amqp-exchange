@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+
+class ExchangeDeclareCommand < AmqpUtils::Command
+  def prepare_options(options)
+    options.banner <<-BANNER.unindent
+    Declares a named exchange.
+
+      #{command_name} <type> <exchange>
+
+    BANNER
+    options.opt :durable, 'Makes the exchange survive across broker restarts',
+      :type => :boolean, :short => :none
+    options.opt :auto_delete, 'Makes the exchange auto_delete after no queues are using it',
+      :type => :boolean, :short => :none
+    options.opt :internal, 'Makes the exchange unusable by publishers. Used for exchange to exchange bindings',
+      :type => :boolean, :short => :none
+    options.opt :passive, 'Passively declares the exchange, which will cause an error if the exchange does not exist',
+      :type => :boolean, :short => :none
+  end
+
+  VALID_TYPES = %w(direct fanout topic)
+
+  def validate
+    @type, @exchange = args
+    Trollop::die "must supply both a type and name" unless @type
+    Trollop::die "must supply a name" unless @exchange
+    Trollop::die "type must be one of <#{VALID_TYPES.inspect}>" unless VALID_TYPES.include?(@type)
+  end
+
+  def execute
+    AMQP::Channel.error do |msg|
+      puts msg
+      EM.next_tick { AMQP.stop { EM.stop } }
+    end
+
+    exchange_options = {
+      :durable => options.durable,
+      :auto_delete => options.auto_delete,
+      :internal => options.internal,
+      :passive => options.passive,
+      :nowait => false
+    }
+    channel.__send__(@type, @exchange, exchange_options) do
+      EM.next_tick { AMQP.stop { EM.stop } }
+    end
+  end
+end
+
+ExchangeDeclareCommand.run

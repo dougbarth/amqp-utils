@@ -102,7 +102,8 @@ class AmqpUtils::Command
     @amqp ||= AMQP.start
   end
 
-  def mq
-    @mq ||= MQ.new
+  def channel
+    @channel ||= AMQP::Channel.new(@amqp)
   end
+  alias mq channel
 end
