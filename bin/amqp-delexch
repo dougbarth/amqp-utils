@@ -20,7 +20,7 @@ class ExchnageDeleteCommand < AmqpUtils::Command
   
   def execute
     @exchanges = args
-    def @exchanges.delete_or_stop(type)
+    def @exchanges.delete_or_stop
       exchange = pop
       if exchange
         conn = AMQP::Channel.new
@@ -28,13 +28,13 @@ class ExchnageDeleteCommand < AmqpUtils::Command
         puts "Deleting exchange #{exchange}" 
         puts "WARNING: Queues might be left unbound"
         exch.delete
-        EM.next_tick { delete_or_stop(type) }
+        EM.next_tick { delete_or_stop }
       else
         AMQP.stop { EM.stop }
       end
     end
 
-    EM.next_tick { @exchanges.delete_or_stop(@type) }
+    EM.next_tick { @exchanges.delete_or_stop }
   end
 end
 
