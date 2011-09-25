@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../lib/amqp_utils/command'
+
+class ExchnageDeleteCommand < AmqpUtils::Command
+
+  def prepare_options(options)
+    options.banner <<-BANNER.unindent
+    Deletes the supplied exchange.
+    WARNING: queue bindings might become obsolete!
+    
+      #{command_name} exchange 
+
+    BANNER
+  end
+
+  def validate
+    Trollop::die "need at least one exchange name" unless args[0] && !args[0].empty?
+  end
+  
+  def execute
+    @exchanges = args
+    def @exchanges.delete_or_stop
+      exchange = pop
+      if exchange
+        conn = AMQP::Channel.new
+        exch = conn.__send__ :topic, exchange, {:passive => true}
+        puts "Deleting exchange #{exchange}" 
+        puts "WARNING: Queues might be left unbound"
+        exch.delete
+        EM.next_tick { delete_or_stop }
+      else
+        AMQP.stop { EM.stop }
+      end
+    end
+
+    EM.next_tick { @exchanges.delete_or_stop }
+  end
+end
+
+ExchnageDeleteCommand.run

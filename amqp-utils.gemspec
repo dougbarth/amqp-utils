@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
       housework on an AMQP queue. In addition, simple scripts can be layered over the tools
       when needed.}
   s.email = %q{dougbarth@gmail.com}
-  s.executables = ["amqp-peek", "amqp-deleteq", "amqp-dequeue", "amqp-unbind", "amqp-statq", "amqp-pop", "amqp-enqueue", "amqp-spy", "amqp-purge"]
+  s.executables = ["amqp-peek", "amqp-deleteq", "amqp-dequeue", "amqp-unbind", "amqp-statq", "amqp-pop", "amqp-enqueue", "amqp-spy", "amqp-purge", "amqp-delexch"]
   s.extra_rdoc_files = [
     "README.txt"
   ]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "amqp-utils.gemspec",
     "bin/amqp-deleteq",
+    "bin/amqp-delexch",
     "bin/amqp-dequeue",
     "bin/amqp-enqueue",
     "bin/amqp-peek",
