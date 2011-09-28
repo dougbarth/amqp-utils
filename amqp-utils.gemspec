@@ -5,17 +5,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{amqp-utils}
-  s.version = "0.4.3"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Doug Barth"]
-  s.date = %q{2011-08-05}
+  s.date = %q{2011-09-27}
   s.description = %q{Command line utilies for interacting with AMQP compliant queues.
       The intention is provide simple management tools that can be used to complete ad hoc
       housework on an AMQP queue. In addition, simple scripts can be layered over the tools
       when needed.}
   s.email = %q{dougbarth@gmail.com}
-  s.executables = ["amqp-peek", "amqp-deleteq", "amqp-dequeue", "amqp-unbind", "amqp-statq", "amqp-pop", "amqp-enqueue", "amqp-spy", "amqp-purge", "amqp-delexch"]
+  s.executables = ["amqp-exchange", "amqp-delexch", "amqp-peek", "amqp-deleteq", "amqp-dequeue", "amqp-unbind", "amqp-statq", "amqp-pop", "amqp-enqueue", "amqp-spy", "amqp-purge"]
   s.extra_rdoc_files = [
     "README.txt"
   ]
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
     "bin/amqp-delexch",
     "bin/amqp-dequeue",
     "bin/amqp-enqueue",
+    "bin/amqp-exchange",
     "bin/amqp-peek",
     "bin/amqp-pop",
     "bin/amqp-purge",
