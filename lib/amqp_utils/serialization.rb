@@ -42,7 +42,7 @@ class AmqpUtils::Serialization
   end
 
   class Json < Base
-    content_type 'text/json'
+    content_type 'text/json', 'application/json'
 
     def self.deserialize(message)
       ::JSON.parse(message)
