@@ -22,6 +22,7 @@ class PeekCommand < AmqpUtils::Command
     options.opt :quiet, 'Suppresses non-message content output',
       :short => 'q', :default => false
     options.opt :num, 'Number of msgs to peek',:short => 'n', :default => 1 
+    options.opt :raw, 'Do not deserialize message for display', :default => false
   end
 
   def validate
@@ -40,7 +41,13 @@ class PeekCommand < AmqpUtils::Command
       queue.pop(:ack => true) do |header, message|
         if message
           puts "(#{@queue})" unless options[:quiet]
-          deserialized_message = AmqpUtils::Serialization.deserialize(header.properties[:content_type], message)
+
+          if options[:raw]
+            deserialized_message = message
+          else
+            deserialized_message = AmqpUtils::Serialization.deserialize(header.properties[:content_type], message)
+          end
+
           @formatter.generate(STDOUT, header, deserialized_message)
         else
           puts "(#{@queue}) empty"
