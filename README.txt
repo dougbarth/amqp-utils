@@ -20,8 +20,14 @@ other AMQP compliant queues. They depend on the amqp gem available at
 
 == INSTALL:
 
+To install from rubgems.org:
+
 * sudo gem install amqp-utils
 
+To build and install the local version:
+
+gem build amqp-utils.gemspec
+gem install amqp-utils-<VERSION>.gem
 == LICENSE:
 
 (The MIT License)
