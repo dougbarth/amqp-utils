@@ -55,30 +55,30 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<amqp>, ["~> 0.7.1"])
-      s.add_runtime_dependency(%q<trollop>, ["~> 1.16.2"])
+      s.add_runtime_dependency(%q<amqp>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<trollop>, ["~> 1.16"])
       s.add_runtime_dependency(%q<facets>, ["~> 2.9"])
-      s.add_runtime_dependency(%q<clio>, ["~> 0.3.0"])
+      s.add_runtime_dependency(%q<clio>, ["~> 0.3"])
       s.add_runtime_dependency(%q<json>, ["~> 1.5"])
-      s.add_runtime_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
-      s.add_runtime_dependency(%q<msgpack>, ["~> 0.4.5"])
+      s.add_runtime_dependency(%q<heredoc_unindent>, ["~> 1.1"])
+      s.add_runtime_dependency(%q<msgpack>, ["~> 0.5"])
     else
-      s.add_dependency(%q<amqp>, ["~> 0.7.1"])
-      s.add_dependency(%q<trollop>, ["~> 1.16.2"])
+      s.add_dependency(%q<amqp>, ["~> 1.0"])
+      s.add_dependency(%q<trollop>, ["~> 1.16"])
       s.add_dependency(%q<facets>, ["~> 2.9"])
-      s.add_dependency(%q<clio>, ["~> 0.3.0"])
+      s.add_dependency(%q<clio>, ["~> 0.3"])
       s.add_dependency(%q<json>, ["~> 1.5"])
-      s.add_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
-      s.add_dependency(%q<msgpack>, ["~> 0.4.5"])
+      s.add_dependency(%q<heredoc_unindent>, ["~> 1.1"])
+      s.add_dependency(%q<msgpack>, ["~> 0.5"])
     end
   else
-    s.add_dependency(%q<amqp>, ["~> 0.7.1"])
-    s.add_dependency(%q<trollop>, ["~> 1.16.2"])
+    s.add_dependency(%q<amqp>, ["~> 1.0"])
+    s.add_dependency(%q<trollop>, ["~> 1.16"])
     s.add_dependency(%q<facets>, ["~> 2.9"])
-    s.add_dependency(%q<clio>, ["~> 0.3.0"])
+    s.add_dependency(%q<clio>, ["~> 0.3"])
     s.add_dependency(%q<json>, ["~> 1.5"])
-    s.add_dependency(%q<heredoc_unindent>, ["~> 1.1.2"])
-    s.add_dependency(%q<msgpack>, ["~> 0.4.5"])
+    s.add_dependency(%q<heredoc_unindent>, ["~> 1.1"])
+    s.add_dependency(%q<msgpack>, ["~> 0.5"])
   end
 end
 
