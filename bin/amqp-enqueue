@@ -40,7 +40,7 @@ class EnqueueCommand < AmqpUtils::Command
   end
 
   def execute
-    @queue = args
+    @queue = args[0]
     if options[:message]
       @message_io = StringIO.new(options[:message])
     else
