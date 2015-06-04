@@ -20,6 +20,7 @@ class EnqueueCommand < AmqpUtils::Command
     BANNER
     options.opt :content_type, 'Sets the content_type header and chooses an appropriate serializer', :type => :string, :short => :none
     options.opt :persistent, 'Mark messages as persistent.', :short => :none
+    options.opt :notdurable, 'Specify channel as durable.', :short => :none
     options.opt :priority, 'The priority of this message', :type => :int, :short => :none, :default => 1
     options.opt :count, 'Number of times the message should be published. If multiple messages are provided, only the first message is published multiple times.', :type => :int, :default => 1
     options.opt :header, 'A key-value pair to be set in "headers" field of the AMQP header', :short => :none, :type => :string, :multi => true
@@ -40,7 +41,7 @@ class EnqueueCommand < AmqpUtils::Command
   end
 
   def execute
-    @queue = args
+    @queue = args[0]
     if options[:message]
       @message_io = StringIO.new(options[:message])
     else
@@ -63,7 +64,7 @@ class EnqueueCommand < AmqpUtils::Command
 
           serialized_message = AmqpUtils::Serialization.serialize(options.content_type, message)
 
-          @mq.queue(queue, :durable => true, :auto_delete => false).
+          @mq.queue(queue, :durable => !options.notdurable, :auto_delete => false).
             publish(serialized_message, publish_options)
 
           @progress.inc if @progress
@@ -99,7 +100,7 @@ class EnqueueCommand < AmqpUtils::Command
 
           serialized_message = AmqpUtils::Serialization.serialize(options.content_type, message['message'])
 
-          @mq.queue(queue, :durable => true, :auto_delete => false).
+          @mq.queue(queue, :durable => !options.notdurable, :auto_delete => false).
             publish(serialized_message, publish_options)
 
           publisher.notify(queue, message_io, formatter, options)
